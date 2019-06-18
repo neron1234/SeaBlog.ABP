@@ -7,3 +7,5 @@ bin/
 aspnet-core/src/SeaBlog.Web.Host/App_Data/Logs/
 aspnet-core/src/SeaBlog.Web.Mvc/App_Data/Logs/
 aspnet-core/src/SeaBlog.Migrator/Logs/Logs.txt
+/vue.index/dist
+/vue.index/node_modules
