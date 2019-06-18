@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SeaBlog.BlogEntitys;
+using SeaBlog.Blogs.Dto;
 using SeaBlog.Categorys.Dto;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace SeaBlog
         public static void CreateMappings(IMapperConfigurationExpression configuration)
         {
             configuration.CreateMap<Category, CategoryDetailOutput>();
+            configuration.CreateMap<Blog, BlogDetailOutput>();
         }
     }
 }

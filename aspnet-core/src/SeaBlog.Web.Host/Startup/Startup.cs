@@ -32,6 +32,8 @@ namespace SeaBlog.Web.Host.Startup
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.Configure<SiteConfig>(_appConfiguration.GetSection("SiteConfig"));
+
             // MVC
             services.AddMvc(
                 options => options.Filters.Add(new CorsAuthorizationFilterFactory(_defaultCorsPolicyName))

@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using SeaBlog.BlogEntitys;
 using SeaBlog.Categorys.Dto;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,6 @@ namespace SeaBlog.Blogs.Dto
 
         public string CategoryId { get; set; }
 
-        public ICollection<CategoryDetailOutput> Categories { get; set; }
+        public virtual List<BlogCategoryDto> BlogCategories { get; set; }
     }
 }

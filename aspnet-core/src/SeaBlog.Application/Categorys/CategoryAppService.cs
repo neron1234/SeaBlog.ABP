@@ -7,7 +7,7 @@ using SeaBlog.Repositories;
 
 namespace SeaBlog.Categorys
 {
-    public class CategoryAppService : SeaBlogApplicationModule, ICategoryAppService
+    public class CategoryAppService : SeaBlogAppServiceBase, ICategoryAppService
     {
         private readonly ICategoryRepository _categoryRepository;
 
