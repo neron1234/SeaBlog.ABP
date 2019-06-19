@@ -52,20 +52,9 @@
                                     </div>
                                     <div class="w-100" style="height:10px"></div>
                                     <div class="col">
-                                        <div class="list-group">
-                                            <!--@if (categorys == null)
-                                            {
-                                            <p><em>Loading...</em></p>
-                                            }
-                                            else
-                                            {
-                                            foreach (var category in categorys.Data)
-                                            {
-                                            var showCategoryId = category.ID;
-                                            <button type="button" class="list-group-item list-group-item-action @(CurrentCategoryId == showCategoryId? " active" : "" )" onclick="@(()=>SearchBlog(showCategoryId))">@category.Name</button>
-                                            }
-                                            }-->
-                                        </div>
+                                        <b-list-group>
+                                            <b-list-group-item href="javascript:void(0);" v-for="category in categoryList">{{category.name}}</b-list-group-item><!--active-->
+                                        </b-list-group>
                                     </div>
                                 </div>
                             </div>
@@ -86,8 +75,13 @@
             return this.$store.state.SiteConfig.siteConfigInfo;
         }
 
+        get categoryList() {
+            return this.$store.state.Category.list;
+        }
+
         async created(){
-            await this.$store.dispatch('getSiteConfig')
+            await this.$store.dispatch('getSiteConfig');
+            await this.$store.dispatch('Category/getAll');
         }
     }
 </script>

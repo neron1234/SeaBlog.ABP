@@ -65,6 +65,9 @@
     <TypeScriptCompile Include="src\lib\ajax.ts" />
     <TypeScriptCompile Include="src\lib\appconst.ts" />
     <TypeScriptCompile Include="src\lib\url.ts" />
+    <TypeScriptCompile Include="src\store\entities\category.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\store\entities\entity.ts" />
     <TypeScriptCompile Include="src\store\entities\page-request.ts" />
     <TypeScriptCompile Include="src\store\entities\page-result.ts" />
@@ -72,6 +75,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\store\index.ts" />
+    <TypeScriptCompile Include="src\store\modules\category.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\store\modules\list-actions.ts" />
     <TypeScriptCompile Include="src\store\modules\list-module.ts" />
     <TypeScriptCompile Include="src\store\modules\list-mutations.ts" />

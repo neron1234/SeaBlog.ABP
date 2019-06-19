@@ -16,19 +16,21 @@ ajax.interceptors.response.use((respon)=>{
     return respon
 },(error)=>{
     if(!!error.response&&!!error.response.data.error&&!!error.response.data.error.message&&error.response.data.error.details){
-        vm.$bvToast.toast(error.response.data.error.message, {
-            title: '系统提示',
-            toaster: 'b-toaster-top-center',
-            solid: true,
-            appendToast: false
-        });
+        //vm.$bvToast.toast(error.response.data.error.message, {
+        //    title: '系统提示',
+        //    toaster: 'b-toaster-top-center',
+        //    solid: true,
+        //    appendToast: false
+        //});
+        alert("error");
     }else if(!!error.response&&!!error.response.data.error&&!!error.response.data.error.message){
-        vm.$bvToast.toast(error.response.data.error.message, {
-            title: '系统提示',
-            toaster: 'b-toaster-top-center',
-            solid: true,
-            appendToast: false
-        });
+        //vm.$bvToast.toast(error.response.data.error.message, {
+        //    title: '系统提示',
+        //    toaster: 'b-toaster-top-center',
+        //    solid: true,
+        //    appendToast: false
+        //});
+        alert("error");
     }else if(!error.response){
         //vm.$bvToast.toast(window.abp.localization.localize('UnknownError'), {
         //    title: '系统提示',
@@ -36,7 +38,6 @@ ajax.interceptors.response.use((respon)=>{
         //    solid: true,
         //    appendToast: false
         //});
-        console.log(error);
         alert("error");
     }
     return Promise.reject(error);

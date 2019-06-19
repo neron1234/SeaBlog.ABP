@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import SiteConfig from './modules/siteConfig'
+import Category from './modules/category'
 
 Vue.use(Vuex);
 
@@ -15,7 +16,8 @@ const store = new Vuex.Store({
 
     },
     modules: {
-        SiteConfig
+        SiteConfig,
+        Category
     }
 });
 
