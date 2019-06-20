@@ -22,6 +22,9 @@
 
     @Component
     export default class Blogs extends Vue {
+        @Prop({ type: String, default: "" }) keyWord!: string;
+        @Prop({ type: String, default: "" }) categoryId!: string;
+
         pagerequest: PageBlogRequest = new PageBlogRequest();
 
         get blogList() {
@@ -40,14 +43,20 @@
             return this.$store.state.Blog.pageSize;
         }
 
-        async created() {
+        async getBlogs() {
             this.pagerequest.skipCount = (this.currentPage - 1) * this.pageSize;
             this.pagerequest.maxResultCount = this.pageSize;
+            this.pagerequest.keyword = this.keyWord;
+            this.pagerequest.categoryId = this.categoryId;
 
             await this.$store.dispatch({
                 type: 'Blog/getPage',
                 data: this.pagerequest
             });
+        }
+
+        async created() {
+            this.getBlogs();
         }
     }
 </script>

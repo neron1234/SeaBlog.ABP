@@ -9,8 +9,8 @@
                 <b-collapse id="nav-collapse" is-nav>
                     <b-navbar-nav>
                         <b-nav-form>
-                            <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
-                            <b-button size="sm" class="my-2 my-sm-0" type="submit" variant="primary">Search</b-button>
+                            <b-form-input size="sm" class="mr-sm-2" placeholder="Search" v-model="keyword"></b-form-input>
+                            <b-button size="sm" class="my-2 my-sm-0" variant="primary" @click="searchBlog">Search</b-button>
                         </b-nav-form>
                     </b-navbar-nav>
 
@@ -35,7 +35,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-8">
-                            <blogList></blogList>
+                            <blogList :keyWord="keyword" ref="childBlogList"></blogList>
                         </div>
                         <div class="col-sm-4">
                             <div class="container">
@@ -74,12 +74,20 @@
         components: { blogList }
     })
     export default class Home extends Vue {
+        $refs!: { childBlogList: HTMLFormElement };
+        keyword: string = "";
+        categoryId: string = "";
+
         get siteConfig() {
             return this.$store.state.SiteConfig.siteConfigInfo;
         }
 
         get categoryList() {
             return this.$store.state.Category.list;
+        }
+
+        searchBlog() {
+            this.$refs.childBlogList.getBlogs();
         }
 
         async created() {

@@ -29,8 +29,8 @@ namespace SeaBlog.Blogs
                     .Where(b => b.IsShow == true && b.IsDeleted == false);
                 //if (!string.IsNullOrEmpty(categoryId))
                 //    query = query.Where(b => b.BlogCategories.Select(bc => bc.CategoryID).Contains(categoryId));
-                //if (!string.IsNullOrEmpty(keyWrod))
-                //    query = query.Where(b => b.Title.Contains(keyWrod) || b.Summary.Contains(keyWrod));
+                if (!string.IsNullOrEmpty(input.Keyword))
+                    query = query.Where(b => b.Title.Contains(input.Keyword) || b.Summary.Contains(input.Keyword));
                 var list = await query
                     .OrderByDescending(b => b.CreationTime)
                     .Skip(input.SkipCount)
