@@ -35,7 +35,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-8">
-                            <blogList :keyWord="keyword" ref="childBlogList"></blogList>
+                            <blogList ref="childBlogList"></blogList>
                         </div>
                         <div class="col-sm-4">
                             <div class="container">
@@ -53,7 +53,7 @@
                                     <div class="w-100" style="height:10px"></div>
                                     <div class="col">
                                         <b-list-group>
-                                            <b-list-group-item href="javascript:void(0);" v-for="category in categoryList">{{category.name}}</b-list-group-item><!--active-->
+                                            <b-list-group-item href="javascript:void(0);" v-for="category in categoryList" @click="searchBlog(category.id)" :active="currentCategoryId==category.id">{{category.name}}</b-list-group-item>
                                         </b-list-group>
                                     </div>
                                 </div>
@@ -76,7 +76,7 @@
     export default class Home extends Vue {
         $refs!: { childBlogList: HTMLFormElement };
         keyword: string = "";
-        categoryId: string = "";
+        categoryId!: string;
 
         get siteConfig() {
             return this.$store.state.SiteConfig.siteConfigInfo;
@@ -86,7 +86,13 @@
             return this.$store.state.Category.list;
         }
 
-        searchBlog() {
+        get currentCategoryId() {
+            return this.categoryId = this.$store.state.Blog.categoryId;
+        }
+
+        searchBlog(id: string = "") {
+            this.$store.commit('Blog/setKeyword', this.keyword);
+            this.$store.commit('Blog/setCategoryId', id);
             this.$refs.childBlogList.getBlogs();
         }
 

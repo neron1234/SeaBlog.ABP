@@ -27,8 +27,8 @@ namespace SeaBlog.Blogs
                     .Include(b => b.BlogCategories)
                     .ThenInclude(b => b.Category)
                     .Where(b => b.IsShow == true && b.IsDeleted == false);
-                //if (!string.IsNullOrEmpty(categoryId))
-                //    query = query.Where(b => b.BlogCategories.Select(bc => bc.CategoryID).Contains(categoryId));
+                if (!string.IsNullOrEmpty(input.categoryId))
+                    query = query.Where(b => b.BlogCategories.Select(bc => bc.CategoryID.ToString()).Contains(input.categoryId));
                 if (!string.IsNullOrEmpty(input.Keyword))
                     query = query.Where(b => b.Title.Contains(input.Keyword) || b.Summary.Contains(input.Keyword));
                 var list = await query

@@ -4,13 +4,21 @@ import ListModule from './list-module';
 import { ActionContext } from 'vuex';
 import Ajax from '../../lib/ajax';
 import PageResult from '../entities/page-result';
+import ListMutations from './list-mutations';
 
 interface BlogState extends ListState<Blog> {
+    keyWord: string,
+    categoryId: string
+}
+
+class BLogMutations extends ListMutations<Blog>{
 
 }
 
 class BlogModule extends ListModule<BlogState, any, Blog>{
     state = {
+        keyWord: "",
+        categoryId: "",
         totalCount: 0,
         currentPage: 1,
         pageSize: 10,
@@ -25,6 +33,20 @@ class BlogModule extends ListModule<BlogState, any, Blog>{
             let page = reponse.data.result as PageResult<Blog>;
             context.state.totalCount = page.totalCount;
             context.state.list = page.items;
+        }
+    };
+    mutations = {
+        setCurrentPage(state: BlogState, page: number) {
+            state.currentPage = page;
+        },
+        setPageSize(state: BlogState, pagesize: number) {
+            state.pageSize = pagesize;
+        },
+        setKeyword(state: BlogState, keyWord: string) {
+            state.keyWord = keyWord;
+        },
+        setCategoryId(state: BlogState, categoryId: string) {
+            state.categoryId = categoryId;
         }
     }
 }

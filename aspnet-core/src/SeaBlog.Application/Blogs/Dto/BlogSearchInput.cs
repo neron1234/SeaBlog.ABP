@@ -8,5 +8,7 @@ namespace SeaBlog.Blogs.Dto
     public class BlogSearchInput: PagedResultRequestDto
     {
         public string Keyword { get; set; }
+
+        public string categoryId { get; set; }
     }
 }
