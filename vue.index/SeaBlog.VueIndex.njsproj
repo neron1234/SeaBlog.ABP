@@ -35,6 +35,9 @@
     <Content Include="public\favicon.ico" />
     <Content Include="public\index.html" />
     <Content Include="src\App.vue" />
+    <Content Include="src\components\Blogs.vue">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\components\Home.vue" />
     <Content Include="src\Resource\photo.jpg" />
     <Content Include="tsconfig.json" />
@@ -65,6 +68,9 @@
     <TypeScriptCompile Include="src\lib\ajax.ts" />
     <TypeScriptCompile Include="src\lib\appconst.ts" />
     <TypeScriptCompile Include="src\lib\url.ts" />
+    <TypeScriptCompile Include="src\store\entities\Blog.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\store\entities\category.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -75,6 +81,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\store\index.ts" />
+    <TypeScriptCompile Include="src\store\modules\blog.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\store\modules\category.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

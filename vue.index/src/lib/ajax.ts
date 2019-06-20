@@ -7,15 +7,16 @@ const ajax = axios.create({
 });
 ajax.interceptors.request.use(function (config) {
     return config;
-  }, function (error) {
-    
+}, function (error) {
+
     return Promise.reject(error);
 });
-let vm=new Vue({});
-ajax.interceptors.response.use((respon)=>{    
+let vm = new Vue({});
+ajax.interceptors.response.use((respon) => {
     return respon
-},(error)=>{
-    if(!!error.response&&!!error.response.data.error&&!!error.response.data.error.message&&error.response.data.error.details){
+}, (error) => {
+    console.log(error);
+    if (!!error.response && !!error.response.data.error && !!error.response.data.error.message && error.response.data.error.details) {
         //vm.$bvToast.toast(error.response.data.error.message, {
         //    title: '系统提示',
         //    toaster: 'b-toaster-top-center',
@@ -23,7 +24,7 @@ ajax.interceptors.response.use((respon)=>{
         //    appendToast: false
         //});
         alert("error");
-    }else if(!!error.response&&!!error.response.data.error&&!!error.response.data.error.message){
+    } else if (!!error.response && !!error.response.data.error && !!error.response.data.error.message) {
         //vm.$bvToast.toast(error.response.data.error.message, {
         //    title: '系统提示',
         //    toaster: 'b-toaster-top-center',
@@ -31,7 +32,7 @@ ajax.interceptors.response.use((respon)=>{
         //    appendToast: false
         //});
         alert("error");
-    }else if(!error.response){
+    } else if (!error.response) {
         //vm.$bvToast.toast(window.abp.localization.localize('UnknownError'), {
         //    title: '系统提示',
         //    toaster: 'b-toaster-top-center',

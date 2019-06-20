@@ -2,7 +2,7 @@
     <div class="main">
         <b-navbar toggleable="lg" type="dark" variant="info">
             <div class="container">
-                <b-navbar-brand href="#">{{siteConfig.name}}</b-navbar-brand>
+                <b-navbar-brand href="/">{{siteConfig.name}}</b-navbar-brand>
 
                 <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -35,7 +35,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-8">
-                            @Body
+                            <blogList></blogList>
                         </div>
                         <div class="col-sm-4">
                             <div class="container">
@@ -67,9 +67,12 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue,Inject, Prop,Watch } from 'vue-property-decorator';
+    import { Component, Vue, Inject, Prop, Watch } from 'vue-property-decorator';
+    import blogList from './Blogs.vue';
 
-    @Component
+    @Component({
+        components: { blogList }
+    })
     export default class Home extends Vue {
         get siteConfig() {
             return this.$store.state.SiteConfig.siteConfigInfo;
@@ -79,7 +82,7 @@
             return this.$store.state.Category.list;
         }
 
-        async created(){
+        async created() {
             await this.$store.dispatch('getSiteConfig');
             await this.$store.dispatch('Category/getAll');
         }

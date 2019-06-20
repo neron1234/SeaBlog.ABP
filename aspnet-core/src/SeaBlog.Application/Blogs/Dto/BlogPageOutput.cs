@@ -5,10 +5,8 @@ using System.Text;
 
 namespace SeaBlog.Blogs.Dto
 {
-    public class BlogPageOutput
+    public class BlogPageOutput: PagedResultDto<BlogDetailOutput>
     {
-        public int PageCount { get; set; }
 
-        public IList<BlogDetailOutput> List { get; set; }
     }
 }
