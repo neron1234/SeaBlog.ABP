@@ -20,7 +20,7 @@ namespace SeaBlog.SiteConfigs
         public SiteConfigOutput GetSiteConfig()
         {
             var config = _siteConfig;
-            return AutoMapper.Mapper.Map<SiteConfigOutput>(config);
+            return ObjectMapper.Map<SiteConfigOutput>(config);
         }
     }
 }

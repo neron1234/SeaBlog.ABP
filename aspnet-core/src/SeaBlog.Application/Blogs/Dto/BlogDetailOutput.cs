@@ -21,8 +21,6 @@ namespace SeaBlog.Blogs.Dto
 
         public bool IsShow { get; set; }
 
-        public string CategoryId { get; set; }
-
         public virtual List<BlogCategoryDto> BlogCategories { get; set; }
     }
 }

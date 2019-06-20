@@ -4,6 +4,8 @@ using System.Text;
 using System.Threading.Tasks;
 using SeaBlog.Categorys.Dto;
 using SeaBlog.Repositories;
+using SeaBlog.BlogEntitys;
+using System.Linq;
 
 namespace SeaBlog.Categorys
 {
@@ -18,8 +20,15 @@ namespace SeaBlog.Categorys
 
         public async Task<List<CategoryDetailOutput>> GetListAsync()
         {
-            var list = await _categoryRepository.GetAllListAsync();
-            return AutoMapper.Mapper.Map<List<CategoryDetailOutput>>(list);
+            try
+            {
+                var list = await _categoryRepository.GetAllListAsync();
+                return ObjectMapper.Map<List<CategoryDetailOutput>>(list);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

@@ -13,7 +13,6 @@ namespace SeaBlog
         public override void PreInitialize()
         {
             Configuration.Authorization.Providers.Add<SeaBlogAuthorizationProvider>();
-            Configuration.Modules.AbpAutoMapper().Configurators.Add(DtoMapper.CreateMappings);
         }
 
         public override void Initialize()

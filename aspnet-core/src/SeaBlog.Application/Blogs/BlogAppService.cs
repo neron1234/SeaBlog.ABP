@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.Extensions.Options;
 using SeaBlog.Blogs.Dto;
 using SeaBlog.Configuration;
 using SeaBlog.Repositories;
+using System.Linq;
 
 namespace SeaBlog.Blogs
 {
@@ -27,7 +26,7 @@ namespace SeaBlog.Blogs
             {
                 int pageSize = _siteConfig.PageSize;
                 var pageResult = await _blogRepository.GetPageAsync(input.PageIndex, pageSize);
-                var list = Mapper.Map<List<BlogDetailOutput>>(pageResult.blogs);
+                var list = ObjectMapper.Map<List<BlogDetailOutput>>(pageResult.blogs);
                 return new BlogPageOutput { PageCount = pageResult.pageCount, List = list };
             }
             catch (Exception ex)
