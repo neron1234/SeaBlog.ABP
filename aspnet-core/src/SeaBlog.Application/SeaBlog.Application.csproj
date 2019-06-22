@@ -11,6 +11,9 @@
     <RootNamespace>SeaBlog</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Markdig" Version="0.17.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\SeaBlog.Core\SeaBlog.Core.csproj" />
   </ItemGroup>
 </Project>

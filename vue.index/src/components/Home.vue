@@ -35,7 +35,8 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-8">
-                            <blogList ref="childBlogList"></blogList>
+                            <blogList ref="childBlogList" v-show="showList"></blogList>
+                            <blogDetail v-show="showDetail"></blogDetail>
                         </div>
                         <div class="col-sm-4">
                             <div class="container">
@@ -69,9 +70,10 @@
 <script lang="ts">
     import { Component, Vue, Inject, Prop, Watch } from 'vue-property-decorator';
     import blogList from './Blogs.vue';
+    import blogDetail from './BlogDetail.vue';
 
     @Component({
-        components: { blogList }
+        components: { blogList, blogDetail }
     })
     export default class Home extends Vue {
         $refs!: { childBlogList: HTMLFormElement };
@@ -88,6 +90,14 @@
 
         get currentCategoryId() {
             return this.categoryId = this.$store.state.Blog.categoryId;
+        }
+
+        get showList() {
+            return this.$store.state.Blog.showList;
+        }
+
+        get showDetail() {
+            return this.$store.state.Blog.showDetail;
         }
 
         searchBlog(id: string = "") {

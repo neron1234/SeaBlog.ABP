@@ -3,7 +3,7 @@
         <div class="card" style="margin-bottom:10px" v-for="blog in blogList">
             <h5 class="card-header">{{blog.creationTime}}</h5>
             <div class="card-body">
-                <h5 class="card-title"><a :href="blog.id">{{blog.title}}</a></h5>
+                <h5 class="card-title"><a href="javascript:void(0);" @click="showBlogDetail(blog.id)">{{blog.title}}</a></h5>
                 <p class="card-text">{{blog.summary}}</p>
                 <span class="badge badge-pill badge-info">@c.Name</span>
             </div>
@@ -21,9 +21,14 @@
         categoryId!: string;
     }
 
+    class BlogDetailRequest {
+        id!: string;
+    }
+
     @Component
     export default class Blogs extends Vue {
         pagerequest: PageBlogRequest = new PageBlogRequest();
+        detailrequest: BlogDetailRequest = new BlogDetailRequest();
 
         get blogList() {
             return this.$store.state.Blog.list;
@@ -48,6 +53,16 @@
 
         get pageSize() {
             return this.$store.state.Blog.pageSize;
+        }
+
+        async showBlogDetail(id: string) {
+            this.$store.commit('Blog/setShowList', false);
+            this.$store.commit('Blog/setShowDetail', true);
+            this.detailrequest.id = id;
+            await this.$store.dispatch({
+                type: 'Blog/getDetail',
+                data: this.detailrequest
+            });
         }
 
         async getBlogs() {

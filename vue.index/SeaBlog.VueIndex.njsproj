@@ -35,6 +35,9 @@
     <Content Include="public\favicon.ico" />
     <Content Include="public\index.html" />
     <Content Include="src\App.vue" />
+    <Content Include="src\components\BlogDetail.vue">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\components\Blogs.vue">
       <SubType>Code</SubType>
     </Content>

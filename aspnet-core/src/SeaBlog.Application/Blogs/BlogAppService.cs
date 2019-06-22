@@ -7,6 +7,7 @@ using SeaBlog.Configuration;
 using SeaBlog.Repositories;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Markdig;
 
 namespace SeaBlog.Blogs
 {
@@ -39,6 +40,21 @@ namespace SeaBlog.Blogs
                 var recordCount = await query.CountAsync();
                 var output = ObjectMapper.Map<List<BlogDetailOutput>>(list);
                 return new BlogPageOutput { TotalCount = recordCount, Items = output };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<BlogDetailOutput> GetAsync(BlogDetailInput input)
+        {
+            try
+            {
+                var blog = await _blogRepository.GetAsync(input.Id);
+                var result = ObjectMapper.Map<BlogDetailOutput>(blog);
+                result.HtmlContent = $"<article class=\"markdown-body\">{Markdown.ToHtml(blog.Content, new MarkdownPipelineBuilder().UseBootstrap().Build())}</article>";
+                return result;
             }
             catch (Exception ex)
             {

@@ -8,7 +8,10 @@ import ListMutations from './list-mutations';
 
 interface BlogState extends ListState<Blog> {
     keyWord: string,
-    categoryId: string
+    categoryId: string,
+    showList: boolean,
+    showDetail: boolean,
+    blogDetail: Blog,
 }
 
 class BLogMutations extends ListMutations<Blog>{
@@ -24,6 +27,9 @@ class BlogModule extends ListModule<BlogState, any, Blog>{
         pageSize: 10,
         list: new Array<Blog>(),
         loading: false,
+        showList: true,
+        showDetail: false,
+        blogDetail: new Blog()
     }
     actions = {
         async getPage(context: ActionContext<BlogState, any>, payload: any) {
@@ -33,7 +39,14 @@ class BlogModule extends ListModule<BlogState, any, Blog>{
             let page = reponse.data.result as PageResult<Blog>;
             context.state.totalCount = page.totalCount;
             context.state.list = page.items;
-        }
+        },
+        async getDetail(context: ActionContext<BlogState, any>, payload: any) {
+            context.state.loading = true;
+            let reponse = await Ajax.get('/api/services/app/Blog/GetAsync', { params: payload.data });
+            context.state.loading = false;
+            let blogDetail = reponse.data.result as Blog;
+            context.state.blogDetail = blogDetail;
+        } 
     };
     mutations = {
         setCurrentPage(state: BlogState, page: number) {
@@ -47,6 +60,12 @@ class BlogModule extends ListModule<BlogState, any, Blog>{
         },
         setCategoryId(state: BlogState, categoryId: string) {
             state.categoryId = categoryId;
+        },
+        setShowList(state: BlogState, showList: boolean) {
+            state.showList = showList;
+        },
+        setShowDetail(state: BlogState, showDetail: boolean) {
+            state.showDetail = showDetail;
         }
     }
 }
