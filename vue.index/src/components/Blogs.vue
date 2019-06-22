@@ -8,6 +8,7 @@
                 <span class="badge badge-pill badge-info">@c.Name</span>
             </div>
         </div>
+        <b-pagination v-model="currentPage" :total-rows="totalCount" :per-page="pageSize"></b-pagination>
     </div>
 </template>
 
@@ -34,6 +35,15 @@
 
         get currentPage() {
             return this.$store.state.Blog.currentPage;
+        }
+
+        set currentPage(value: number) {
+            this.$store.state.Blog.currentPage = value;
+            this.getBlogs();
+        }
+
+        get totalCount(){
+            return this.$store.state.Blog.totalCount;
         }
 
         get pageSize() {
