@@ -10,7 +10,7 @@
                     <b-navbar-nav>
                         <b-nav-form>
                             <b-form-input size="sm" class="mr-sm-2" placeholder="Search" v-model="keyword"></b-form-input>
-                            <b-button size="sm" class="my-2 my-sm-0" variant="primary" @click="searchBlog">Search</b-button>
+                            <b-button size="sm" class="my-2 my-sm-0" variant="primary" @click="searchBlog(currentCategoryId)">Search</b-button>
                         </b-nav-form>
                     </b-navbar-nav>
 
@@ -78,7 +78,6 @@
     export default class Home extends Vue {
         $refs!: { childBlogList: HTMLFormElement };
         keyword: string = "";
-        categoryId!: string;
 
         get siteConfig() {
             return this.$store.state.SiteConfig.siteConfigInfo;
@@ -89,7 +88,7 @@
         }
 
         get currentCategoryId() {
-            return this.categoryId = this.$store.state.Blog.categoryId;
+            return this.$store.state.Blog.categoryId;
         }
 
         get showList() {

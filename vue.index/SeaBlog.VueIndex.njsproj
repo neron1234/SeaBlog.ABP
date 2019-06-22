@@ -42,6 +42,7 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\components\Home.vue" />
+    <Content Include="src\Resource\css\GitHubMarkDownStyle.css" />
     <Content Include="src\Resource\photo.jpg" />
     <Content Include="tsconfig.json" />
     <Content Include="package.json" />
@@ -55,6 +56,7 @@
     <Folder Include="src\components\" />
     <Folder Include="src\lib\" />
     <Folder Include="src\Resource\" />
+    <Folder Include="src\Resource\css\" />
     <Folder Include="src\store\" />
     <Folder Include="src\store\entities\" />
     <Folder Include="src\store\modules\" />
