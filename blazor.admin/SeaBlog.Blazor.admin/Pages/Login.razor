@@ -1,0 +1,62 @@
+﻿@page "/Login"
+@layout LoginLayout
+@inject IUriHelper uriHelper
+@inject IUserApi userApi
+
+<style type="text/css">
+    .w-30 {
+        width: 30% !important;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row mx-0 justify-content-center align-items-center">
+        <div class="text-center w-30">
+            <form class="form-signin" onsubmit="@OnSubmit">
+                <h1 class="h3 mb-3 font-weight-normal">Login</h1>
+
+                <label for="inputUsername" class="sr-only">User Name</label>
+                <input id="inputUsername" class="form-control" placeholder="Username" required autofocus @bind="@loginParameters.UserNameOrEmailAddress" />
+
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required @bind="@loginParameters.Password" />
+
+                <div class="form-check m-3">
+                    <input type="checkbox" id="inputRememberMe" class="form-check-input" @bind="@loginParameters.RememberClient" />
+                    <label class="form-check-label" for="inputRememberMe">Remember Me</label>
+                </div>
+
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
+                <label class="text-danger">@error</label>
+            </form>
+        </div>
+    </div>
+</div>
+
+@code{
+    LoginParameters loginParameters { get; set; } = new LoginParameters();
+    EntityResult<UserDetail> loginResult;
+    string error { get; set; }
+
+    async Task OnSubmit()
+    {
+        error = null;
+        try
+        {
+            loginResult = await userApi.LoginAsync(loginParameters);
+            if (loginResult.Success)
+            {
+                uriHelper.NavigateTo("/Index");
+            }
+            else
+            {
+                error = loginResult.Error as string;
+            }
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+}
