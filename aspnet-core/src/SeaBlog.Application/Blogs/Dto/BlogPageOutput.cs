@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SeaBlog.Blogs.Dto
 {
-    public class BlogPageOutput: PagedResultDto<BlogDetailOutput>
+    public class BlogPageOutput: PagedResultDto<BlogDto>
     {
 
     }

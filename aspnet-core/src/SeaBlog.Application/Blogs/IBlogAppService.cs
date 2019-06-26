@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services;
+using SeaBlog.BlogEntitys;
 using SeaBlog.Blogs.Dto;
 using System;
 using System.Collections.Generic;
@@ -7,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace SeaBlog.Blogs
 {
-    public interface IBlogAppService : IApplicationService
+    public interface IBlogAppService : IAsyncCrudAppService<BlogDto, Guid, PagedBlogResultRequestDto, CreateBlogDto, BlogDto>
     {
-        Task<BlogPageOutput> GetPageAsync(BlogSearchInput input);
+
     }
 }

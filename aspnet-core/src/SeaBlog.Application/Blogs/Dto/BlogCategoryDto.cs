@@ -7,6 +7,6 @@ namespace SeaBlog.Blogs.Dto
 {
     public class BlogCategoryDto
     {
-        public CategoryDetailOutput Category { get; set; }
+        public CategoryDto Category { get; set; }
     }
 }

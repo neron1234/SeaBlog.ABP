@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SeaBlog.Blogs.Dto
 {
-    public class BlogSearchInput: PagedResultRequestDto
+    public class PagedBlogResultRequestDto: PagedResultRequestDto
     {
         public string Keyword { get; set; }
 

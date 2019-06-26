@@ -8,58 +8,41 @@ using SeaBlog.Repositories;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Markdig;
+using Abp.Authorization;
+using SeaBlog.Authorization;
+using SeaBlog.BlogEntitys;
+using Abp.Application.Services;
+using Abp.Domain.Repositories;
+using Abp.Linq.Extensions;
+using Abp.Extensions;
+using Abp.Application.Services.Dto;
+using Abp.Domain.Entities;
 
 namespace SeaBlog.Blogs
 {
-    public class BlogAppService : SeaBlogAppServiceBase, IBlogAppService
+    public class BlogAppService : AsyncCrudAppService<Blog, BlogDto, Guid, PagedBlogResultRequestDto, CreateBlogDto, BlogDto>, IBlogAppService
     {
-        private readonly IBlogRepository _blogRepository;
-
-        public BlogAppService(IBlogRepository blogRepository)
+        public BlogAppService(IRepository<Blog, Guid> repository)
+            : base(repository)
         {
-            _blogRepository = blogRepository;
+            
         }
 
-        public async Task<BlogPageOutput> GetPageAsync(BlogSearchInput input)
+        protected override IQueryable<Blog> CreateFilteredQuery(PagedBlogResultRequestDto input)
         {
-            try
-            {
-                var query = _blogRepository.GetAll()
-                    .Include(b => b.BlogCategories)
-                    .ThenInclude(b => b.Category)
-                    .Where(b => b.IsShow == true && b.IsDeleted == false);
-                if (!string.IsNullOrEmpty(input.categoryId))
-                    query = query.Where(b => b.BlogCategories.Select(bc => bc.CategoryID.ToString()).Contains(input.categoryId));
-                if (!string.IsNullOrEmpty(input.Keyword))
-                    query = query.Where(b => b.Title.Contains(input.Keyword) || b.Summary.Contains(input.Keyword));
-                var list = await query
-                    .OrderByDescending(b => b.CreationTime)
-                    .Skip(input.SkipCount)
-                    .Take(input.MaxResultCount)
-                    .ToListAsync();
-                var recordCount = await query.CountAsync();
-                var output = ObjectMapper.Map<List<BlogDetailOutput>>(list);
-                return new BlogPageOutput { TotalCount = recordCount, Items = output };
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return Repository.GetAll()
+                .Include(b => b.BlogCategories)
+                .ThenInclude(b => b.Category)
+                .Where(b => b.IsShow == true)
+                .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.Title.Contains(input.Keyword) || x.Summary.Contains(input.Keyword))
+                .WhereIf(!input.categoryId.IsNullOrWhiteSpace(), x => x.BlogCategories.Select(bc => bc.CategoryID.ToString()).Contains(input.categoryId));
         }
 
-        public async Task<BlogDetailOutput> GetAsync(BlogDetailInput input)
+        protected override BlogDto MapToEntityDto(Blog entity)
         {
-            try
-            {
-                var blog = await _blogRepository.GetAsync(input.Id);
-                var result = ObjectMapper.Map<BlogDetailOutput>(blog);
-                result.HtmlContent = $"<article class=\"markdown-body\">{Markdown.ToHtml(blog.Content, new MarkdownPipelineBuilder().UseBootstrap().Build())}</article>";
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var result = ObjectMapper.Map<BlogDto>(entity);
+            result.HtmlContent = $"<article class=\"markdown-body\">{Markdown.ToHtml(entity.Content, new MarkdownPipelineBuilder().UseBootstrap().Build())}</article>";
+            return result;
         }
     }
 }

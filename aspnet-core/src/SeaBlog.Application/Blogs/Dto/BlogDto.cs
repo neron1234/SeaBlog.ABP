@@ -1,13 +1,14 @@
 ﻿using Abp.Application.Services.Dto;
+using Abp.AutoMapper;
 using SeaBlog.BlogEntitys;
-using SeaBlog.Categorys.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace SeaBlog.Blogs.Dto
 {
-    public class BlogDetailOutput : AuditedEntityDto<Guid>
+    [AutoMapFrom(typeof(Blog))]
+    public class BlogDto : AuditedEntityDto<Guid>
     {
         public string Slug { get; set; }
 

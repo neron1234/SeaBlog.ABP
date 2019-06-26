@@ -3,10 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SeaBlog.Blogs.Dto
+namespace SeaBlog.Categorys.Dto
 {
-    public class BlogDetailInput: EntityDto<Guid>
+    public class CategoryPageOutput : PagedResultDto<CategoryDto>
     {
-
     }
 }

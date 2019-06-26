@@ -6,29 +6,26 @@ using SeaBlog.Categorys.Dto;
 using SeaBlog.Repositories;
 using SeaBlog.BlogEntitys;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Abp.Application.Services;
+using Abp.Domain.Repositories;
+using Abp.Linq.Extensions;
+using Abp.Extensions;
 
 namespace SeaBlog.Categorys
 {
-    public class CategoryAppService : SeaBlogAppServiceBase, ICategoryAppService
+    public class CategoryAppService : AsyncCrudAppService<Category, CategoryDto, Guid, PagedCategoryResultRequestDto, CreateCategoryDto, CategoryDto>, ICategoryAppService
     {
-        private readonly ICategoryRepository _categoryRepository;
-
-        public CategoryAppService(ICategoryRepository categoryRepository)
+        public CategoryAppService(IRepository<Category, Guid> repository)
+             : base(repository)
         {
-            _categoryRepository = categoryRepository;
+
         }
 
-        public async Task<List<CategoryDetailOutput>> GetListAsync()
+        protected override IQueryable<Category> CreateFilteredQuery(PagedCategoryResultRequestDto input)
         {
-            try
-            {
-                var list = await _categoryRepository.GetAllListAsync();
-                return ObjectMapper.Map<List<CategoryDetailOutput>>(list);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return Repository.GetAll()
+                .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), c => c.Name.Contains(input.Keyword));
         }
     }
 }
