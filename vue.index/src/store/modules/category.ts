@@ -3,6 +3,7 @@ import ListState from "./list-state";
 import Category from "../entities/category"
 import ListModule from './list-module';
 import Ajax from '../../lib/ajax'
+import PageResult from '../entities/page-result';
 
 interface CategoryState extends ListState<Category> {
 
@@ -19,9 +20,10 @@ class CategoryModule extends ListModule<CategoryState, any, Category>{
     actions = {
         async getAll(context: ActionContext<CategoryState, any>) {
             context.state.loading = true;
-            let reponse = await Ajax.get('/api/services/app/Category/GetListAsync');
+            let reponse = await Ajax.get('/api/services/app/Category/GetAll');
             context.state.loading = false;
-            context.state.list = reponse.data.result;
+            let page = reponse.data.result as PageResult<Category>;
+            context.state.list = page.items;
         }
     }
 }

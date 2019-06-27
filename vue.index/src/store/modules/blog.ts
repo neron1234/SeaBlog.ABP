@@ -34,7 +34,7 @@ class BlogModule extends ListModule<BlogState, any, Blog>{
     actions = {
         async getPage(context: ActionContext<BlogState, any>, payload: any) {
             context.state.loading = true;
-            let reponse = await Ajax.get('/api/services/app/Blog/GetPageAsync', { params: payload.data });
+            let reponse = await Ajax.get('/api/services/app/Blog/GetAll', { params: payload.data });
             context.state.loading = false;
             let page = reponse.data.result as PageResult<Blog>;
             context.state.totalCount = page.totalCount;
@@ -42,7 +42,7 @@ class BlogModule extends ListModule<BlogState, any, Blog>{
         },
         async getDetail(context: ActionContext<BlogState, any>, payload: any) {
             context.state.loading = true;
-            let reponse = await Ajax.get('/api/services/app/Blog/GetAsync', { params: payload.data });
+            let reponse = await Ajax.get('/api/services/app/Blog/Get', { params: payload.data });
             context.state.loading = false;
             let blogDetail = reponse.data.result as Blog;
             context.state.blogDetail = blogDetail;
