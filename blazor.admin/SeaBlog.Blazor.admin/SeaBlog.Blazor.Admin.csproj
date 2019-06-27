@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\Blog\Detail.razor" />
     <Content Remove="Pages\Blog\Oper.razor" />
   </ItemGroup>
 
