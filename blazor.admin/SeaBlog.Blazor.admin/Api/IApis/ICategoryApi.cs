@@ -32,6 +32,13 @@ namespace SeaBlog.Blazor.Admin.Api.IApis
         /// </summary>
         /// <param name="CategoryDetail"></param>
         /// <returns></returns>
-        Task<EntityResult<string>> SaveAsync(CategoryDetail categoryDetail);
+        Task<EntityResult<CategoryDetail>> CreateAsync(CategoryDetail categoryDetail);
+
+        /// <summary>
+        /// 保存分类
+        /// </summary>
+        /// <param name="CategoryDetail"></param>
+        /// <returns></returns>
+        Task<EntityResult<CategoryDetail>> UpdateAsync(CategoryDetail categoryDetail);
     }
 }

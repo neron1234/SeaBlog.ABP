@@ -9,10 +9,10 @@
 }
 else
 {
-<form onsubmit="@SaveBlog">
+<form @onsubmit="@SaveBlog">
     <div class="form-group">
         <label for="Title">分类名称</label>
-        <input type="text" class="form-control" id="Name" required autofocus placeholder="请输入分类名称" bind="@category.Data.Name" />
+        <input type="text" class="form-control" id="Name" required autofocus placeholder="请输入分类名称" @bind="@category.Result.Name" />
     </div>
     <button type="submit" class="btn btn-primary">保存</button>
     <a class="btn btn-primary" href="CategoryList">返回</a>
@@ -20,18 +20,18 @@ else
 </form>
 }
 
-@functions {
+@code {
     [Parameter]
     private string Id { get; set; }
     private string error { get; set; }
-    JsonPackage<string> saveResult;
-    JsonPackage<CategoryDetail> category;
+    EntityResult<CategoryDetail> saveResult;
+    EntityResult<CategoryDetail> category;
 
     protected override async Task OnInitAsync()
     {
         if (string.IsNullOrEmpty(Id))
         {
-            category = new JsonPackage<CategoryDetail>() { Data = new CategoryDetail() };
+            category = new EntityResult<CategoryDetail>() { Result = new CategoryDetail() };
         }
         else
         {
@@ -44,14 +44,17 @@ else
         error = null;
         try
         {
-            saveResult = await categoryApi.SaveAsync(category.Data);
+            if(string.IsNullOrEmpty(Id))
+                saveResult = await categoryApi.CreateAsync(category.Result);
+            else
+                saveResult = await categoryApi.UpdateAsync(category.Result);
             if (saveResult.Success)
             {
                 uriHelper.NavigateTo("/CategoryList");
             }
             else
             {
-                error = saveResult.Message;
+                error = saveResult.Error as string;
             }
         }
         catch (Exception ex)

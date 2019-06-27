@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Content Remove="Pages\Blog\Oper.razor" />
-    <Content Remove="Pages\Category\Oper.razor" />
   </ItemGroup>
 
   <ItemGroup>

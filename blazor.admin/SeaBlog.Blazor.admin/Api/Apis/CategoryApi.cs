@@ -63,12 +63,27 @@ namespace SeaBlog.Blazor.Admin.Api.Apis
             return result;
         }
 
-        public async Task<EntityResult<string>> SaveAsync(CategoryDetail categoryDetail)
+        public async Task<EntityResult<CategoryDetail>> CreateAsync(CategoryDetail categoryDetail)
         {
-            EntityResult<string> result = new EntityResult<string>();
+            EntityResult<CategoryDetail> result = new EntityResult<CategoryDetail>();
             try
             {
-                result = await httpClient.PostJsonAsync<EntityResult<string>>($"{Config.ApiUrl}/api/services/app/Category/Create", categoryDetail);
+                result = await httpClient.PostJsonAsync<EntityResult<CategoryDetail>>($"{Config.ApiUrl}/api/services/app/Category/Create", categoryDetail);
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Error = ex.Message;
+            }
+            return result;
+        }
+
+        public async Task<EntityResult<CategoryDetail>> UpdateAsync(CategoryDetail categoryDetail)
+        {
+            EntityResult<CategoryDetail> result = new EntityResult<CategoryDetail>();
+            try
+            {
+                result = await httpClient.PostJsonAsync<EntityResult<CategoryDetail>>($"{Config.ApiUrl}/api/services/app/Category/Update", categoryDetail);
             }
             catch (Exception ex)
             {
