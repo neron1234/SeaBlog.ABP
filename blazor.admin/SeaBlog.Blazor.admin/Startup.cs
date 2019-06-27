@@ -10,6 +10,8 @@ namespace SeaBlog.Blazor.Admin
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IUserApi, UserApi>();
+            services.AddScoped<IBlogApi, BlogApi>();
+            services.AddScoped<ICategoryApi, CategoryApi>();
         }
 
         public void Configure(IComponentsApplicationBuilder app)

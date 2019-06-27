@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using SeaBlog.Blazor.Admin.Api.IApis;
+using SeaBlog.Blazor.Admin.Models;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -14,62 +17,47 @@ namespace SeaBlog.Blazor.Admin.Api.Apis
             httpClient = _httpClient;
         }
 
-        public async Task<JsonPackage<(int pageCount, IList<BlogDetail> blogs)>> GetPageAsync(BlogSearchParameters searchParameters)
+        public async Task<ListResult<BlogDetail>> GetPageAsync(BlogSearchParameters searchParameters)
         {
-            JsonPackage<(int pageCount, IList<BlogDetail> blogs)> result = new JsonPackage<(int pageCount, IList<BlogDetail> blogs)>();
+            ListResult<BlogDetail> result = new ListResult<BlogDetail>();
             try
             {
-                result = await httpClient.GetJsonAsync<JsonPackage<(int pageCount, IList<BlogDetail> blogs)>>($"api/Blog/GetList?pageIndex={searchParameters.PageIndex}&categoryId={searchParameters.CategoryId}&KeyWord={searchParameters.KeyWord}");
+                result = await httpClient.GetJsonAsync<ListResult<BlogDetail>>($"{Config.ApiUrl}/api/services/app/Blog/GetAll?SkipCount={(searchParameters.PageIndex - 1) * Config.PageSize}&MaxResultCount={Config.PageSize}&categoryId={searchParameters.CategoryId}&Keyword={searchParameters.KeyWord}");
             }
             catch (Exception ex)
             {
                 result.Success = false;
-                result.Message = ex.Message;
+                result.Error = ex.Message;
             }
             return result;
         }
 
-        public async Task<JsonPackage<BlogDetail>> GetDetailAsync(string id)
+        public async Task<EntityResult<BlogDetail>> GetDetailAsync(string id)
         {
-            JsonPackage<BlogDetail> result = new JsonPackage<BlogDetail>();
+            EntityResult<BlogDetail> result = new EntityResult<BlogDetail>();
             try
             {
-                result = await httpClient.GetJsonAsync<JsonPackage<BlogDetail>>($"api/Blog/GetDetail?id={id}");
+                result = await httpClient.GetJsonAsync<EntityResult<BlogDetail>>($"{Config.ApiUrl}/api/services/app/Blog/Get?Id={id}");
             }
             catch (Exception ex)
             {
                 result.Success = false;
-                result.Message = ex.Message;
+                result.Error = ex.Message;
             }
             return result;
         }
 
-        public async Task<JsonPackage<BlogDetail>> GetOperDetailAsync(string id)
+        public async Task<EntityResult<string>> CreateAsync(BlogDetail blogDetail)
         {
-            JsonPackage<BlogDetail> result = new JsonPackage<BlogDetail>();
+            EntityResult<string> result = new EntityResult<string>();
             try
             {
-                result = await httpClient.GetJsonAsync<JsonPackage<BlogDetail>>($"api/Blog/GetOperDetail?id={id}");
+                result = await httpClient.PostJsonAsync<EntityResult<string>>($"{Config.ApiUrl}/api/services/app/Blog/Create", blogDetail);
             }
             catch (Exception ex)
             {
                 result.Success = false;
-                result.Message = ex.Message;
-            }
-            return result;
-        }
-
-        public async Task<JsonPackage<string>> SaveAsync(BlogDetail blogDetail)
-        {
-            JsonPackage<string> result = new JsonPackage<string>();
-            try
-            {
-                result = await httpClient.PostJsonAsync<JsonPackage<string>>("api/Blog/Save", blogDetail);
-            }
-            catch (Exception ex)
-            {
-                result.Success = false;
-                result.Message = ex.Message;
+                result.Error = ex.Message;
             }
             return result;
         }

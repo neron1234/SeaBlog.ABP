@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using SeaBlog.Blazor.Admin.Api.IApis;
+using SeaBlog.Blazor.Admin.Models;
+using SeaBlog.Blazor.Admin.Models.Base;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -14,62 +18,62 @@ namespace SeaBlog.Blazor.Admin.Api.Apis
             httpClient = _httpClient;
         }
 
-        public async Task<JsonPackage<IList<CategoryDetail>>> GetListAsync()
+        public async Task<ListResult<CategoryDetail>> GetListAsync()
         {
-            JsonPackage<IList<CategoryDetail>> result = new JsonPackage<IList<CategoryDetail>>();
+            ListResult<CategoryDetail> result = new ListResult<CategoryDetail>();
             try
             {
-                result = await httpClient.GetJsonAsync<JsonPackage<IList<CategoryDetail>>>("api/Category/GetList");
+                result = await httpClient.GetJsonAsync<ListResult<CategoryDetail>>($"{Config.ApiUrl}/api/services/app/Category/GetAll");
             }
             catch (Exception ex)
             {
                 result.Success = false;
-                result.Message = ex.Message;
+                result.Error = ex.Message;
             }
             return result;
         }
 
-        public async Task<JsonPackage<(int pageCount, IList<CategoryDetail> categorys)>> GetPageAsync(CommonSearchParameters searchParameters)
+        public async Task<ListResult<CategoryDetail>> GetPageAsync(SearchParameters searchParameters)
         {
-            JsonPackage<(int pageCount, IList<CategoryDetail> blogs)> result = new JsonPackage<(int pageCount, IList<CategoryDetail> blogs)>();
+            ListResult<CategoryDetail> result = new ListResult<CategoryDetail>();
             try
             {
-                result = await httpClient.GetJsonAsync<JsonPackage<(int pageCount, IList<CategoryDetail> blogs)>>($"api/Category/GetPage?pageIndex={searchParameters.PageIndex}&KeyWord={searchParameters.KeyWord}");
+                result = await httpClient.GetJsonAsync<ListResult<CategoryDetail>>($"{Config.ApiUrl}/api/services/app/Category/GetAll?SkipCount={(searchParameters.PageIndex - 1) * Config.PageSize}&MaxResultCount={Config.PageSize}&Keyword={searchParameters.KeyWord}");
             }
             catch (Exception ex)
             {
                 result.Success = false;
-                result.Message = ex.Message;
+                result.Error = ex.Message;
             }
             return result;
         }
 
-        public async Task<JsonPackage<CategoryDetail>> GetDetailAsync(string id)
+        public async Task<EntityResult<CategoryDetail>> GetDetailAsync(string id)
         {
-            JsonPackage<CategoryDetail> result = new JsonPackage<CategoryDetail>();
+            EntityResult<CategoryDetail> result = new EntityResult<CategoryDetail>();
             try
             {
-                result = await httpClient.GetJsonAsync<JsonPackage<CategoryDetail>>($"api/Category/GetDetail?id={id}");
+                result = await httpClient.GetJsonAsync<EntityResult<CategoryDetail>>($"{Config.ApiUrl}/api/services/app/Category/Get?id={id}");
             }
             catch (Exception ex)
             {
                 result.Success = false;
-                result.Message = ex.Message;
+                result.Error = ex.Message;
             }
             return result;
         }
 
-        public async Task<JsonPackage<string>> SaveAsync(CategoryDetail categoryDetail)
+        public async Task<EntityResult<string>> SaveAsync(CategoryDetail categoryDetail)
         {
-            JsonPackage<string> result = new JsonPackage<string>();
+            EntityResult<string> result = new EntityResult<string>();
             try
             {
-                result = await httpClient.PostJsonAsync<JsonPackage<string>>("api/Category/Save", categoryDetail);
+                result = await httpClient.PostJsonAsync<EntityResult<string>>($"{Config.ApiUrl}/api/services/app/Category/Create", categoryDetail);
             }
             catch (Exception ex)
             {
                 result.Success = false;
-                result.Message = ex.Message;
+                result.Error = ex.Message;
             }
             return result;
         }

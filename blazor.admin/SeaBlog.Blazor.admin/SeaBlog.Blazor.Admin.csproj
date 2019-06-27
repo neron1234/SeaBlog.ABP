@@ -7,12 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Api\Apis\BlogApi.cs" />
-    <Compile Remove="Api\Apis\CategoryApi.cs" />
     <Compile Remove="Api\Apis\SiteConfigApi.cs" />
-    <Compile Remove="Api\IApis\IBlogApi.cs" />
-    <Compile Remove="Api\IApis\ICategoryApi.cs" />
     <Compile Remove="Api\IApis\ISiteConfigApi.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\Blog\Detail.razor" />
+    <Content Remove="Pages\Blog\Oper.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\Confirm.razor" />
+    <None Include="Components\ConfirmButton.razor" />
   </ItemGroup>
 
   <ItemGroup>

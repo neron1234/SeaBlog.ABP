@@ -12,7 +12,7 @@
 <div class="container py-5">
     <div class="row mx-0 justify-content-center align-items-center">
         <div class="text-center w-30">
-            <form class="form-signin" onsubmit="@OnSubmit">
+            <form class="form-signin" @onsubmit="@OnSubmit">
                 <h1 class="h3 mb-3 font-weight-normal">Login</h1>
 
                 <label for="inputUsername" class="sr-only">User Name</label>
@@ -47,7 +47,7 @@
             loginResult = await userApi.LoginAsync(loginParameters);
             if (loginResult.Success)
             {
-                uriHelper.NavigateTo("/Index");
+                uriHelper.NavigateTo("/");
             }
             else
             {
