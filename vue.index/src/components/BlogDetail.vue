@@ -1,9 +1,7 @@
 ﻿<template>
     <div>
         <b-card :title="blogDetail.title" :sub-title="blogDetail.creationTime">
-            <b-card-text v-html="blogDetail.htmlContent">
-            </b-card-text>
-
+            <b-card-text v-html="blogDetail.htmlContent" v-highlight></b-card-text>
             <b-button variant="outline-primary" @click="back()">Back</b-button>
         </b-card>
     </div>

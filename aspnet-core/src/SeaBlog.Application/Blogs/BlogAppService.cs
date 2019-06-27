@@ -41,7 +41,7 @@ namespace SeaBlog.Blogs
         protected override BlogDto MapToEntityDto(Blog entity)
         {
             var result = ObjectMapper.Map<BlogDto>(entity);
-            result.HtmlContent = $"<article class=\"markdown-body\">{Markdown.ToHtml(entity.Content, new MarkdownPipelineBuilder().UseBootstrap().Build())}</article>";
+            result.HtmlContent = Markdown.ToHtml(entity.Content, new MarkdownPipelineBuilder().UseBootstrap().Build());
             return result;
         }
     }
