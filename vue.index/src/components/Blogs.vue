@@ -5,7 +5,7 @@
             <div class="card-body">
                 <h5 class="card-title"><a href="javascript:void(0);" @click="showBlogDetail(blog.id)">{{blog.title}}</a></h5>
                 <p class="card-text">{{blog.summary}}</p>
-                <span class="badge badge-pill badge-info">@c.Name</span>
+                <span class="badge badge-pill badge-info" v-for="categoryItem in blog.blogCategories">{{categoryItem.category.name}}</span>
             </div>
         </div>
         <b-pagination v-model="currentPage" :total-rows="totalCount" :per-page="pageSize"></b-pagination>
