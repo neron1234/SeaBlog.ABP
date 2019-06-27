@@ -25,6 +25,13 @@ namespace SeaBlog.Blazor.Admin.Api.IApis
         /// </summary>
         /// <param name="blogDetail"></param>
         /// <returns></returns>
-        Task<EntityResult<string>> CreateAsync(BlogDetail blogDetail);
+        Task<EntityResult<BlogDetail>> CreateAsync(BlogDetail blogDetail);
+
+        /// <summary>
+        /// 保存博客
+        /// </summary>
+        /// <param name="blogDetail"></param>
+        /// <returns></returns>
+        Task<EntityResult<BlogDetail>> UpdateAsync(BlogDetail blogDetail);
     }
 }

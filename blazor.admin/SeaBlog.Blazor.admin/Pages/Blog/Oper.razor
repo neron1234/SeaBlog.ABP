@@ -1,6 +1,5 @@
 ﻿@page "/BlogOper"
 @page "/BlogOper/{Id}"
-@inject IJSRuntime JsRuntime
 @inject IUriHelper uriHelper
 @inject ICategoryApi categoryApi
 @inject IBlogApi blogApi
@@ -11,14 +10,14 @@
 }
 else
 {
-<form onsubmit="@SaveBlog">
+<form @onsubmit="@SaveBlog">
     <div class="form-group">
         <label for="Title">标题</label>
-        <input type="text" class="form-control" id="Title" required autofocus placeholder="请输入博客标题" bind="@blog.Data.Title" />
+        <input type="text" class="form-control" id="Title" required autofocus placeholder="请输入博客标题" @bind="@blog.Result.Title" />
     </div>
     <div class="form-group">
         <label for="Summary">简介</label>
-        <input type="text" class="form-control" id="Summary" required placeholder="请输入博客简介" bind="@blog.Data.Summary" />
+        <input type="text" class="form-control" id="Summary" required placeholder="请输入博客简介" @bind="@blog.Result.Summary" />
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
@@ -29,18 +28,18 @@ else
             }
             else
             {
-            <select class="form-control" id="CategoryId" bind="@blog.Data.CategoryId">
-                <option value="">请选择</option>
-                @foreach (var category in categorys.Data)
-                {
-                <option value="@category.ID">@category.Name</option>
-                }
-            </select>
+                <select class="form-control" id="CategoryId" @bind="@blog.Result.BlogCategories.FirstOrDefault().Category.Id">
+                    <option value="">请选择</option>
+                    @foreach (var category in categorys.Result.Items)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
             }
         </div>
         <div class="form-group col-md-6">
             <label for="Slug">链接</label>
-            <input type="text" class="form-control" id="Slug" required placeholder="请输入博客链接" bind="@blog.Data.Slug" />
+            <input type="text" class="form-control" id="Slug" required placeholder="请输入博客链接" @bind="@blog.Result.Slug" />
         </div>
     </div>
     <div class="form-group">
@@ -49,13 +48,13 @@ else
             <div class="col">
                 <span class="label label-default label-hint">Editor</span>
                 <div class="markdown-editor">
-                    <textarea id="Content" bind="@blog.Data.Content" />
+                    <textarea id="Content" @bind="@blog.Result.Content" />
                 </div>
             </div>
             <div class="col">
                 <span class="label label-default label-hint">HTML Preview</span>
                 <div class="markdown-view">
-                    @((MarkupString)blog.Data.HtmlContent)
+                    @((MarkupString)blog.Result.HtmlContent)
                 </div>
             </div>
         </div>
@@ -66,27 +65,24 @@ else
 </form>
 }
 
-@functions {
+@code {
     [Parameter]
     private string Id { get; set; }
     private string error { get; set; }
-    JsonPackage<string>
-    saveResult;
-    JsonPackage<BlogDetail>
-        blog;
-        JsonPackage<IList<CategoryDetail>> categorys;
+    EntityResult<BlogDetail> saveResult;
+    EntityResult<BlogDetail> blog;
+    ListResult<CategoryDetail> categorys;
 
     protected override async Task OnInitAsync()
     {
         categorys = await categoryApi.GetListAsync();
         if (string.IsNullOrEmpty(Id))
         {
-            blog = new JsonPackage<BlogDetail>() { Data = new BlogDetail() };
+            blog = new EntityResult<BlogDetail>() { Result = new BlogDetail() { BlogCategories = new List<BlogCategory> { new BlogCategory(){Category = new CategoryDetail()} } } };
         }
         else
         {
-            blog = await blogApi.GetOperDetailAsync(Id);
-            await JsRuntime.InvokeAsync<object>("InitHighlighting");
+            blog = await blogApi.GetDetailAsync(Id);
         }
     }
 
@@ -95,14 +91,18 @@ else
         error = null;
         try
         {
-            saveResult = await blogApi.SaveAsync(blog.Data);
+            if(string.IsNullOrEmpty(Id))
+                saveResult = await blogApi.CreateAsync(blog.Result);
+            else
+                saveResult = await blogApi.UpdateAsync(blog.Result);
+
             if (saveResult.Success)
             {
                 uriHelper.NavigateTo("/BlogList");
             }
             else
             {
-                error = saveResult.Message;
+                error = saveResult.Error as string;
             }
         }
         catch (Exception ex)

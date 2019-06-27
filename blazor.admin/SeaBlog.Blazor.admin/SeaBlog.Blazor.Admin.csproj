@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\Blog\Oper.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Components\Confirm.razor" />
     <None Include="Components\ConfirmButton.razor" />
   </ItemGroup>
