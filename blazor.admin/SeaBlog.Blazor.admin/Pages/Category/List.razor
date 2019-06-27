@@ -1,0 +1,77 @@
+﻿@page "/CategoryList"
+@inject ICategoryApi categoryApi
+
+@if (categorys == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <form class="form-inline mb-2" onsubmit="@Search">
+        <div class="form-group mb-2">
+            <input type="text" class="form-control" id="KeyWord" placeholder="关键字" bind="@searchParameters.KeyWord" />
+        </div>
+        <button type="submit" class="btn btn-primary mx-sm-3 mb-2">查询</button>
+        <a class="btn btn-info mb-2" href="CategoryOper">新增</a>
+    </form>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>名称</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in categorys.Data.categorys)
+            {
+                <tr>
+                    <td>@category.Name</td>
+                    <td>
+                        <a class="btn btn-primary" href="CategoryOper/@category.ID">编辑</a>
+                        <SeaBlog.Client.Components.ConfirmButton BtnType="danger" Title="删除确认" Content="您确定要删除这个分类吗？" BtnText="删除"></SeaBlog.Client.Components.ConfirmButton>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <nav aria-label="...">
+        <ul class="pagination">
+            <li class="page-item @(searchParameters.PageIndex == 1 ? "disabled" : "")">
+                <a class="page-link" href="javascript:void(0)" onclick="@(async ()=>await GetPage(searchParameters.PageIndex-1))">Previous</a>
+            </li>
+
+            @for (int i = 1; i <= categorys.Data.pageCount; i++)
+            {
+                var showPageIndex = i;
+                <li class="page-item @(searchParameters.PageIndex == i ? "active" : "")">
+                    <a class="page-link" href="javascript:void(0)" onclick="@(async ()=>await GetPage(showPageIndex))">@i</a>
+                </li>
+            }
+
+            <li class="page-item @(searchParameters.PageIndex == categorys.Data.pageCount ? "disabled" : "")">
+                <a class="page-link" href="javascript:void(0)" onclick="@(async ()=>await GetPage(searchParameters.PageIndex+1))">Next</a>
+            </li>
+        </ul>
+    </nav>
+}
+
+@functions {
+    private CommonSearchParameters searchParameters { get; set; } = new CommonSearchParameters();
+    JsonPackage<(int pageCount, IList<CategoryDetail> categorys)> categorys;
+
+    protected override async Task OnInitAsync()
+    {
+        await GetPage(1);
+    }
+
+    async Task GetPage(int index)
+    {
+        searchParameters.PageIndex = index;
+        await Search();
+    }
+
+    async Task Search()
+    {
+        categorys = await categoryApi.GetPageAsync(searchParameters);
+    }
+}

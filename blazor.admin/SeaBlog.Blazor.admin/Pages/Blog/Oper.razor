@@ -1,16 +1,113 @@
-﻿@page "/counter"
+﻿@page "/BlogOper"
+@page "/BlogOper/{Id}"
+@inject IJSRuntime JsRuntime
+@inject IUriHelper uriHelper
+@inject ICategoryApi categoryApi
+@inject IBlogApi blogApi
 
-<h1>Counter</h1>
+@if (blog == null)
+{
+<p><em>Loading...</em></p>
+}
+else
+{
+<form onsubmit="@SaveBlog">
+    <div class="form-group">
+        <label for="Title">标题</label>
+        <input type="text" class="form-control" id="Title" required autofocus placeholder="请输入博客标题" bind="@blog.Data.Title" />
+    </div>
+    <div class="form-group">
+        <label for="Summary">简介</label>
+        <input type="text" class="form-control" id="Summary" required placeholder="请输入博客简介" bind="@blog.Data.Summary" />
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="Summary">分类</label>
+            @if (categorys == null)
+            {
+            <p><em>Loading...</em></p>
+            }
+            else
+            {
+            <select class="form-control" id="CategoryId" bind="@blog.Data.CategoryId">
+                <option value="">请选择</option>
+                @foreach (var category in categorys.Data)
+                {
+                <option value="@category.ID">@category.Name</option>
+                }
+            </select>
+            }
+        </div>
+        <div class="form-group col-md-6">
+            <label for="Slug">链接</label>
+            <input type="text" class="form-control" id="Slug" required placeholder="请输入博客链接" bind="@blog.Data.Slug" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Content">内容</label>
+        <div class="row">
+            <div class="col">
+                <span class="label label-default label-hint">Editor</span>
+                <div class="markdown-editor">
+                    <textarea id="Content" bind="@blog.Data.Content" />
+                </div>
+            </div>
+            <div class="col">
+                <span class="label label-default label-hint">HTML Preview</span>
+                <div class="markdown-view">
+                    @((MarkupString)blog.Data.HtmlContent)
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">保存</button>
+    <a class="btn btn-primary" href="BlogList">返回</a>
+    <label class="text-danger">@error</label>
+</form>
+}
 
-<p>Current count: @currentCount</p>
+@functions {
+    [Parameter]
+    private string Id { get; set; }
+    private string error { get; set; }
+    JsonPackage<string>
+    saveResult;
+    JsonPackage<BlogDetail>
+        blog;
+        JsonPackage<IList<CategoryDetail>> categorys;
 
-<button class="btn btn-primary" @onclick="@IncrementCount">Click me</button>
-
-@code {
-    int currentCount = 0;
-
-    void IncrementCount()
+    protected override async Task OnInitAsync()
     {
-        currentCount++;
+        categorys = await categoryApi.GetListAsync();
+        if (string.IsNullOrEmpty(Id))
+        {
+            blog = new JsonPackage<BlogDetail>() { Data = new BlogDetail() };
+        }
+        else
+        {
+            blog = await blogApi.GetOperDetailAsync(Id);
+            await JsRuntime.InvokeAsync<object>("InitHighlighting");
+        }
+    }
+
+    async Task SaveBlog()
+    {
+        error = null;
+        try
+        {
+            saveResult = await blogApi.SaveAsync(blog.Data);
+            if (saveResult.Success)
+            {
+                uriHelper.NavigateTo("/BlogList");
+            }
+            else
+            {
+                error = saveResult.Message;
+            }
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
     }
 }

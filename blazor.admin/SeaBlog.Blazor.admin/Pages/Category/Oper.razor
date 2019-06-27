@@ -1,0 +1,62 @@
+﻿@page "/CategoryOper"
+@page "/CategoryOper/{Id}"
+@inject IUriHelper uriHelper
+@inject ICategoryApi categoryApi
+
+@if (category == null)
+{
+<p><em>Loading...</em></p>
+}
+else
+{
+<form onsubmit="@SaveBlog">
+    <div class="form-group">
+        <label for="Title">分类名称</label>
+        <input type="text" class="form-control" id="Name" required autofocus placeholder="请输入分类名称" bind="@category.Data.Name" />
+    </div>
+    <button type="submit" class="btn btn-primary">保存</button>
+    <a class="btn btn-primary" href="CategoryList">返回</a>
+    <label class="text-danger">@error</label>
+</form>
+}
+
+@functions {
+    [Parameter]
+    private string Id { get; set; }
+    private string error { get; set; }
+    JsonPackage<string> saveResult;
+    JsonPackage<CategoryDetail> category;
+
+    protected override async Task OnInitAsync()
+    {
+        if (string.IsNullOrEmpty(Id))
+        {
+            category = new JsonPackage<CategoryDetail>() { Data = new CategoryDetail() };
+        }
+        else
+        {
+            category = await categoryApi.GetDetailAsync(Id);
+        }
+    }
+
+    async Task SaveBlog()
+    {
+        error = null;
+        try
+        {
+            saveResult = await categoryApi.SaveAsync(category.Data);
+            if (saveResult.Success)
+            {
+                uriHelper.NavigateTo("/CategoryList");
+            }
+            else
+            {
+                error = saveResult.Message;
+            }
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+}

@@ -13,6 +13,8 @@
 
   <ItemGroup>
     <Content Remove="Pages\Blog\Oper.razor" />
+    <Content Remove="Pages\Category\List.razor" />
+    <Content Remove="Pages\Category\Oper.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +30,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SeaBlog.Blazor.Admin.Models\SeaBlog.Blazor.Admin.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\Category\" />
   </ItemGroup>
 
 </Project>
