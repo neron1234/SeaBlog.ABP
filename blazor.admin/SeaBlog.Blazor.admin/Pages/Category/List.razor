@@ -7,9 +7,9 @@
 }
 else
 {
-    <form class="form-inline mb-2" onsubmit="@Search">
+    <form class="form-inline mb-2" @onsubmit="@Search">
         <div class="form-group mb-2">
-            <input type="text" class="form-control" id="KeyWord" placeholder="关键字" bind="@searchParameters.KeyWord" />
+            <input type="text" class="form-control" id="KeyWord" placeholder="关键字" @bind="@searchParameters.KeyWord" />
         </div>
         <button type="submit" class="btn btn-primary mx-sm-3 mb-2">查询</button>
         <a class="btn btn-info mb-2" href="CategoryOper">新增</a>
@@ -22,13 +22,13 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var category in categorys.Data.categorys)
+            @foreach (var category in categorys.Result.Items)
             {
                 <tr>
                     <td>@category.Name</td>
                     <td>
-                        <a class="btn btn-primary" href="CategoryOper/@category.ID">编辑</a>
-                        <SeaBlog.Client.Components.ConfirmButton BtnType="danger" Title="删除确认" Content="您确定要删除这个分类吗？" BtnText="删除"></SeaBlog.Client.Components.ConfirmButton>
+                        <a class="btn btn-primary" href="CategoryOper/@category.Id">编辑</a>
+                        <SeaBlog.Blazor.Admin.Components.ConfirmButton BtnType="danger" Title="删除确认" Content="您确定要删除这个分类吗？" BtnText="删除"></SeaBlog.Blazor.Admin.Components.ConfirmButton>
                     </td>
                 </tr>
             }
@@ -37,27 +37,28 @@ else
     <nav aria-label="...">
         <ul class="pagination">
             <li class="page-item @(searchParameters.PageIndex == 1 ? "disabled" : "")">
-                <a class="page-link" href="javascript:void(0)" onclick="@(async ()=>await GetPage(searchParameters.PageIndex-1))">Previous</a>
+                <a class="page-link" href="javascript:void(0)" @onclick="@(async ()=>await GetPage(searchParameters.PageIndex-1))">Previous</a>
             </li>
 
-            @for (int i = 1; i <= categorys.Data.pageCount; i++)
+            @for (int i = 1; i <= pageCount; i++)
             {
                 var showPageIndex = i;
                 <li class="page-item @(searchParameters.PageIndex == i ? "active" : "")">
-                    <a class="page-link" href="javascript:void(0)" onclick="@(async ()=>await GetPage(showPageIndex))">@i</a>
+                    <a class="page-link" href="javascript:void(0)" @onclick="@(async ()=>await GetPage(showPageIndex))">@i</a>
                 </li>
             }
 
-            <li class="page-item @(searchParameters.PageIndex == categorys.Data.pageCount ? "disabled" : "")">
-                <a class="page-link" href="javascript:void(0)" onclick="@(async ()=>await GetPage(searchParameters.PageIndex+1))">Next</a>
+            <li class="page-item @(searchParameters.PageIndex == pageCount ? "disabled" : "")">
+                <a class="page-link" href="javascript:void(0)" @onclick="@(async ()=>await GetPage(searchParameters.PageIndex+1))">Next</a>
             </li>
         </ul>
     </nav>
 }
 
-@functions {
-    private CommonSearchParameters searchParameters { get; set; } = new CommonSearchParameters();
-    JsonPackage<(int pageCount, IList<CategoryDetail> categorys)> categorys;
+@code {
+    private SearchParameters searchParameters { get; set; } = new SearchParameters();
+    ListResult<CategoryDetail> categorys;
+    int pageCount;
 
     protected override async Task OnInitAsync()
     {
@@ -73,5 +74,6 @@ else
     async Task Search()
     {
         categorys = await categoryApi.GetPageAsync(searchParameters);
+        pageCount = Util.GetPageCount(categorys.Result.TotalCount);
     }
 }
