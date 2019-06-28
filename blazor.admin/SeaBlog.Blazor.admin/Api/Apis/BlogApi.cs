@@ -22,7 +22,7 @@ namespace SeaBlog.Blazor.Admin.Api.Apis
             ListResult<BlogDetail> result = new ListResult<BlogDetail>();
             try
             {
-                result = await httpClient.GetJsonAsync<ListResult<BlogDetail>>($"{Config.ApiUrl}/api/services/app/Blog/GetAll?SkipCount={(searchParameters.PageIndex - 1) * Config.PageSize}&MaxResultCount={Config.PageSize}&categoryId={searchParameters.CategoryId}&Keyword={searchParameters.KeyWord}");
+                result = await httpClient.GetJsonAsync<ListResult<BlogDetail>>(Config.BuildApiUrlWithParams("api/services/app/Blog/GetAll", searchParameters));
             }
             catch (Exception ex)
             {

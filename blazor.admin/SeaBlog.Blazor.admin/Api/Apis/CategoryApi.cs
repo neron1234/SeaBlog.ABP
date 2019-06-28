@@ -38,7 +38,7 @@ namespace SeaBlog.Blazor.Admin.Api.Apis
             ListResult<CategoryDetail> result = new ListResult<CategoryDetail>();
             try
             {
-                result = await httpClient.GetJsonAsync<ListResult<CategoryDetail>>($"{Config.ApiUrl}/api/services/app/Category/GetAll?SkipCount={(searchParameters.PageIndex - 1) * Config.PageSize}&MaxResultCount={Config.PageSize}&Keyword={searchParameters.KeyWord}");
+                result = await httpClient.GetJsonAsync<ListResult<CategoryDetail>>(Config.BuildApiUrlWithParams("api/services/app/Category/GetAll", searchParameters));
             }
             catch (Exception ex)
             {

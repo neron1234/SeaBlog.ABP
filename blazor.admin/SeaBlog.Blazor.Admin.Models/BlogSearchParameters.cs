@@ -8,5 +8,7 @@ namespace SeaBlog.Blazor.Admin.Models
     public class BlogSearchParameters : SearchParameters
     {
         public string CategoryId { get; set; }
+
+        public bool? IsShow { get; set; }
     }
 }

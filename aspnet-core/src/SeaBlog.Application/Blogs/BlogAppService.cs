@@ -25,7 +25,7 @@ namespace SeaBlog.Blogs
         public BlogAppService(IRepository<Blog, Guid> repository)
             : base(repository)
         {
-            
+
         }
 
         protected override IQueryable<Blog> CreateFilteredQuery(PagedBlogResultRequestDto input)
@@ -33,9 +33,9 @@ namespace SeaBlog.Blogs
             return Repository.GetAll()
                 .Include(b => b.BlogCategories)
                 .ThenInclude(b => b.Category)
-                .Where(b => b.IsShow == true)
+                .WhereIf(input.IsShow.HasValue, b => b.IsShow == input.IsShow)
                 .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.Title.Contains(input.Keyword) || x.Summary.Contains(input.Keyword))
-                .WhereIf(!input.categoryId.IsNullOrWhiteSpace(), x => x.BlogCategories.Select(bc => bc.CategoryID.ToString()).Contains(input.categoryId));
+                .WhereIf(!input.CategoryId.IsNullOrWhiteSpace(), x => x.BlogCategories.Select(bc => bc.CategoryID.ToString()).Contains(input.CategoryId));
         }
 
         protected override BlogDto MapToEntityDto(Blog entity)
