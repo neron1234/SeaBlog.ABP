@@ -9,5 +9,7 @@
         public const string Pages_Roles = "Pages.Roles";
 
         public const string Pages_Blogs = "Pages.Blogs";
+
+        public const string Pages_Categories = "Pages.Categories";
     }
 }

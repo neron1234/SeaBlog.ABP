@@ -56,5 +56,23 @@ namespace SeaBlog.Blogs
             result.HtmlContent = Markdown.ToHtml(entity.Content, new MarkdownPipelineBuilder().UseBootstrap().Build());
             return result;
         }
+
+        [AbpAuthorize(PermissionNames.Pages_Blogs)]
+        public override Task<BlogDto> Create(CreateBlogDto input)
+        {
+            return base.Create(input);
+        }
+
+        [AbpAuthorize(PermissionNames.Pages_Blogs)]
+        public override Task<BlogDto> Update(BlogDto input)
+        {
+            return base.Update(input);
+        }
+
+        [AbpAuthorize(PermissionNames.Pages_Blogs)]
+        public override Task Delete(EntityDto<Guid> input)
+        {
+            return base.Delete(input);
+        }
     }
 }
