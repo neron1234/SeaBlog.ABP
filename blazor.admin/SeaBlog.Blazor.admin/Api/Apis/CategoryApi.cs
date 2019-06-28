@@ -83,7 +83,7 @@ namespace SeaBlog.Blazor.Admin.Api.Apis
             EntityResult<CategoryDetail> result = new EntityResult<CategoryDetail>();
             try
             {
-                result = await httpClient.PostJsonAsync<EntityResult<CategoryDetail>>($"{Config.ApiUrl}/api/services/app/Category/Update", categoryDetail);
+                result = await httpClient.PutJsonAsync<EntityResult<CategoryDetail>>($"{Config.ApiUrl}/api/services/app/Category/Update", categoryDetail);
             }
             catch (Exception ex)
             {

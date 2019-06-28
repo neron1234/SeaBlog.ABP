@@ -19,6 +19,7 @@
     class PageBlogRequest extends PageRequest {
         keyword!: string;
         categoryId!: string;
+        isShow!: boolean;
     }
 
     class BlogDetailRequest {

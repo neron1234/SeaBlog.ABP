@@ -38,6 +38,18 @@ namespace SeaBlog.Blogs
                 .WhereIf(!input.CategoryId.IsNullOrWhiteSpace(), x => x.BlogCategories.Select(bc => bc.CategoryID.ToString()).Contains(input.CategoryId));
         }
 
+        protected override async Task<Blog> GetEntityByIdAsync(Guid id)
+        {
+            var blog = await Repository.GetAll().Include(x => x.BlogCategories).ThenInclude(x => x.Category).FirstOrDefaultAsync(x => x.Id == id);
+
+            if (blog == null)
+            {
+                throw new EntityNotFoundException(typeof(Blog), id);
+            }
+
+            return blog;
+        }
+
         protected override BlogDto MapToEntityDto(Blog entity)
         {
             var result = ObjectMapper.Map<BlogDto>(entity);

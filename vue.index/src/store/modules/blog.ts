@@ -34,6 +34,7 @@ class BlogModule extends ListModule<BlogState, any, Blog>{
     actions = {
         async getPage(context: ActionContext<BlogState, any>, payload: any) {
             context.state.loading = true;
+            payload.data.isShow = true;
             let reponse = await Ajax.get('/api/services/app/Blog/GetAll', { params: payload.data });
             context.state.loading = false;
             let page = reponse.data.result as PageResult<Blog>;

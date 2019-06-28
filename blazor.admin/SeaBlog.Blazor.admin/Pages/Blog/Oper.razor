@@ -29,7 +29,6 @@ else
             else
             {
                 <select class="form-control" id="CategoryId" @bind="@blog.Result.BlogCategories.FirstOrDefault().Category.Id">
-                    <option value="">请选择</option>
                     @foreach (var category in categorys.Result.Items)
                     {
                         <option value="@category.Id">@category.Name</option>
